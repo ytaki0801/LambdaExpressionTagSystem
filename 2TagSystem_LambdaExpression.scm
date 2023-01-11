@@ -1,6 +1,6 @@
 ;;;;
 ;;;; Collatz-like function sequence from 5 on 2-tag system
-;;;; by using lambda expression only
+;;;; by using lambda expression only (with function variable definitions)
 ;;;;
 ;;;; (C) 2023 TAKIZAWA Yozo
 ;;;; This code is licensed under CC0.
@@ -31,7 +31,7 @@
       (((n (lambda (g) (lambda (h) (h (g f))))) (lambda (u) x)) (lambda (u) u)))))
 (define (ZEROP n) ((n (lambda (x) F)) T))
 (define (ELP m n) (ZEROP ((n DEC) m)))
-(define (EQP x y) ((ELP x y) (ELP y x) (ELP x y)))
+(define (EQP m n) ((ELP m n) (ELP n m) (ELP m n)))
 
 ; initial value of queue: (1 1 1 1 1) as 5
 (define q (CONS ONE (CONS ONE (CONS ONE (CONS ONE (CONS ONE NIL))))))

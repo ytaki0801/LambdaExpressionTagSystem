@@ -1,3 +1,12 @@
+####
+#### Collatz-like function sequence from 5 on 2-tag system
+#### by using lambda experssion only (with function and variable definitions)
+####
+#### (C) 2023 TAKIZAWA Yozo
+#### This code is licensed under CC0.
+#### https://creativecommons.org/publicdomain/zero/1.0/
+####
+
 # Church booleans
 T = lambda x, y: x
 F = lambda x, y: y
@@ -16,10 +25,10 @@ def NILP(n): return Car(n)
 ONE   = lambda f: lambda x: f(x)
 TWO   = lambda f: lambda x: f(f(x))
 THREE = lambda f: lambda x: f(f(f(x)))
-def DEC(n): return lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u) 
+def DEC(n): return lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u)
 def ZEROP(n): return n(lambda x: F)(T)
 def ELP(m, n): return ZEROP(n(DEC)(m))
-def EQP(x, y): return ELP(x, y)(ELP(y, x), ELP(x, y))
+def EQP(m, n): return ELP(m, n)(ELP(n, m), ELP(m, n))
 
 # initial value of queue: (1,1,1,1,1) as 5
 q = CONS(ONE, CONS(ONE, CONS(ONE, CONS(ONE, CONS(ONE, NIL)))))
@@ -30,18 +39,17 @@ r2 = CONS(TWO, CONS(ONE, NIL))
 r3 = CONS(THREE, CONS(ONE, CONS(ONE, CONS(ONE, NIL))))
 r = CONS(r1, CONS(r2, CONS(r3, NIL)))
 
-# append and assoc
-def AP(a, b):
-    return NILP(a)(lambda: b, lambda: CONS(CAR(a), AP(CDR(a), b)))()
-def AQ(k, a):
+# append and dic search
+def AP(a, b): return NILP(a)(lambda: b, lambda: CONS(CAR(a), AP(CDR(a), b)))()
+def DS(k, a):
     TC = lambda: NIL
-    FC = lambda: EQP(k, CAR(CAR(a)))(lambda: CDR(CAR(a)), lambda: AQ(k, CDR(a)))()
+    FC = lambda: EQP(k, CAR(CAR(a)))(lambda: CDR(CAR(a)), lambda: DS(k, CDR(a)))()
     return NILP(a)(TC, FC)()
 
 # 2-tag system
 def two_ts(q, r):
     TC = lambda: CONS(q, NIL)
-    FC = lambda: CONS(q, two_ts(AP(CDR(CDR(q)), AQ(CAR(q), r)), r))
+    FC = lambda: CONS(q, two_ts(AP(CDR(CDR(q)), DS(CAR(q), r)), r))
     return NILP(CDR(q))(TC, FC)()
 
 
@@ -49,7 +57,7 @@ def two_ts(q, r):
 
 def lambda2cons(x):
     try:
-        a = {ONE: 'a', TWO: 'b', THREE: 'c'}[CAR(x)]
+        a = {ONE:'a', TWO:'b', THREE:'c'}[CAR(x)]
     except KeyError:
         a = False
     d = CDR(x)

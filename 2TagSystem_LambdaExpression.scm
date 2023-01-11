@@ -30,8 +30,8 @@
     (lambda (x)
       (((n (lambda (g) (lambda (h) (h (g f))))) (lambda (u) x)) (lambda (u) u)))))
 (define (ZEROP n) ((n (lambda (x) F)) T))
-(define (EQLP m n) (ZEROP ((n DEC) m)))
-(define (EQP x y) ((EQLP x y) (EQLP y x) (EQLP x y)))
+(define (ELP m n) (ZEROP ((n DEC) m)))
+(define (EQP x y) ((ELP x y) (ELP y x) (ELP x y)))
 
 ; initial value of queue: (1 1 1 1 1) as 5
 (define q (CONS ONE (CONS ONE (CONS ONE (CONS ONE (CONS ONE NIL))))))

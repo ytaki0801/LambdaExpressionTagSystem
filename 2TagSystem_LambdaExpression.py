@@ -18,11 +18,11 @@ TWO   = lambda f: lambda x: f(f(x))
 THREE = lambda f: lambda x: f(f(f(x)))
 def DEC(n): return lambda f: lambda x: n(lambda g: lambda h: h(g(f)))(lambda u: x)(lambda u: u) 
 def ZEROP(n): return n(lambda x: F)(T)
-def EQLP(m, n): return ZEROP(n(DEC)(m))
-def EQP(x, y): return EQLP(x, y)(EQLP(x, y), EQLP(x, y))
+def ELP(m, n): return ZEROP(n(DEC)(m))
+def EQP(x, y): return ELP(x, y)(ELP(y, x), ELP(x, y))
 
 
-print(EQP(ONE, TWO)(True, False))
+print(EQP(ONE, ONE)(True, False))
 
 
 #q = 'a'*5

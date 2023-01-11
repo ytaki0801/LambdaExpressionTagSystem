@@ -36,7 +36,7 @@
 ; initial value of queue: (1 1 1 1 1) as 5
 (define q (CONS ONE (CONS ONE (CONS ONE (CONS ONE (CONS ONE NIL))))))
 
-; 2-tag system rules for Collatz-like function: {1=>(2 3), 2=>(1), 3=>(1 1 1)}
+; 2-tag system rules for Collatz-like function: ((1 . (2 3)) (2 . (1)) (3 . (1 1 1)))
 (define r (CONS (CONS ONE (CONS TWO (CONS THREE NIL)))
           (CONS (CONS TWO (CONS ONE NIL))
           (CONS (CONS THREE (CONS ONE (CONS ONE (CONS ONE NIL))))

@@ -21,12 +21,38 @@ def ZEROP(n): return n(lambda x: F)(T)
 def ELP(m, n): return ZEROP(n(DEC)(m))
 def EQP(x, y): return ELP(x, y)(ELP(y, x), ELP(x, y))
 
+# initial value of queue: (1,1,1,1,1) as 5
+q = CONS(ONE, CONS(ONE, CONS(ONE, CONS(ONE, CONS(ONE, NIL)))))
 
-print(EQP(ONE, ONE)(True, False))
+# 2-tag system rules for Collatz-like function: {1:(2,3), 2:(1), 3:(1,1,1)}
+r1 = CONS(ONE, CONS(TWO, CONS(THREE, NIL)))
+r2 = CONS(TWO, CONS(ONE, NIL))
+r3 = CONS(THREE, CONS(ONE, CONS(ONE, CONS(ONE, NIL))))
+r = CONS(r1, CONS(r2, CONS(r3, NIL)))
+
+# append and assoc
+def AP(a, b):
+    return NILP(a)(lambda: b, lambda: CONS(CAR(a), AP(CDR(a), b)))()
+def AQ(k, a):
+    TC = lambda: NIL
+    FC = lambda: EQP(k, CAR(CAR(a)))(lambda: CDR(CAR(a)), lambda: AQ(k, CDR(a)))()
+    return NILP(a)(TC, FC)()
+
+# 2-tag system
+def two_ts(q, r):
+    TC = lambda: CONS(q, NIL)
+    FC = lambda: CONS(q, two_ts(AP(CDR(CDR(q)), AQ(CAR(q), r)), r))
+    return NILP(CDR(q))(TC, FC)()
 
 
-#q = 'a'*5
-#r = {'a':'bc', 'b':'a', 'c':'aaa'}
-#while q[1:]:
-#    q = q[2:] + r[q[0]]
-#    print(q)
+#### Verification for the result of 2-tag system
+
+def lambda2cons(x):
+    try:
+        a = {ONE: 'a', TWO: 'b', THREE: 'c'}[CAR(x)]
+    except KeyError:
+        a = False
+    d = CDR(x)
+    return [a if a else lambda2cons(CAR(x))] + ([] if d == NIL else lambda2cons(d))
+
+for x in lambda2cons(two_ts(q, r)): print(''.join(x))

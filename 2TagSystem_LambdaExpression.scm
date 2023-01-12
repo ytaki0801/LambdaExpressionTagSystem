@@ -11,16 +11,6 @@
 (define T (lambda (x y) x))
 (define F (lambda (x y) y))
 
-; Church pairs and list encodings
-(define (Cons x y) (lambda (z) (z x y)))
-(define (Car p) (p (lambda (x y) x)))
-(define (Cdr p) (p (lambda (x y) y)))
-(define (CONS x y) (Cons F (Cons x y)))
-(define (CAR p) (Car (Cdr p)))
-(define (CDR p) (Cdr (Cdr p)))
-(define NIL (Cons T F))
-(define (NILP n) (Car n))
-
 ; Church numerals and calculations
 (define ONE   (lambda (f) (lambda (x) (f x))))
 (define TWO   (lambda (f) (lambda (x) (f (f x)))))
@@ -33,6 +23,16 @@
 (define (ELP m n) (ZEROP ((n DEC) m)))
 (define (EQP m n) ((ELP m n) (ELP n m) (ELP m n)))
 
+; Church pairs and list encodings
+(define (Cons x y) (lambda (z) (z x y)))
+(define (Car p) (p (lambda (x y) x)))
+(define (Cdr p) (p (lambda (x y) y)))
+(define (CONS x y) (Cons F (Cons x y)))
+(define (CAR p) (Car (Cdr p)))
+(define (CDR p) (Cdr (Cdr p)))
+(define NIL (Cons T F))
+(define (NCONSP n) (Car n))
+
 ; initial value of queue: (1 1 1 1 1) as 5
 (define q (CONS ONE (CONS ONE (CONS ONE (CONS ONE (CONS ONE NIL))))))
 
@@ -44,10 +44,10 @@
 
 ;; append and assoc
 (define (AP a b)
-  (((NILP a)
+  (((NCONSP a)
     (lambda () b) (lambda () (CONS (CAR a) (AP (CDR a) b))))))
 (define (AQ k a)
-  (((NILP a)
+  (((NCONSP a)
     (lambda () NIL)
     (lambda () (((EQP k (CAR (CAR a)))
                  (lambda () (CDR (CAR a)))
@@ -55,7 +55,7 @@
 
 ;; 2-tag system
 (define (two-ts q r)
-  (((NILP (CDR q))
+  (((NCONSP (CDR q))
     (lambda () (CONS q NIL))
     (lambda () (CONS q (two-ts (AP (CDR (CDR q)) (AQ (CAR q) r)) r))))))
 

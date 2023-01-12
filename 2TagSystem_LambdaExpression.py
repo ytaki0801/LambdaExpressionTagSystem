@@ -27,8 +27,8 @@ def Cdr(p): return p(lambda x, y: y)
 def CONS(x, y): return Cons(F, Cons(x, y))
 def CAR(p): return Car(Cdr(p))
 def CDR(p): return Cdr(Cdr(p))
-NIL = Cons(T, F)
 def NCONSP(n): return Car(n)
+NIL = Cons(T, T)
 
 # initial value of queue: (1,1,1,1,1) as 5
 q = CONS(ONE, CONS(ONE, CONS(ONE, CONS(ONE, CONS(ONE, NIL)))))

@@ -30,8 +30,8 @@
 (define (CONS x y) (Cons F (Cons x y)))
 (define (CAR p) (Car (Cdr p)))
 (define (CDR p) (Cdr (Cdr p)))
-(define NIL (Cons T F))
 (define (NCONSP n) (Car n))
+(define NIL (Cons T T))
 
 ; initial value of queue: (1 1 1 1 1) as 5
 (define q (CONS ONE (CONS ONE (CONS ONE (CONS ONE (CONS ONE NIL))))))

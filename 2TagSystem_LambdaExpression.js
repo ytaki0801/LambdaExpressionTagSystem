@@ -27,8 +27,8 @@ function Cdr(p) { return p((x, y) => y); }
 function CONS(x, y) { return Cons(F, Cons(x, y)); }
 function CAR(p) { return Car(Cdr(p)); }
 function CDR(p) { return Cdr(Cdr(p)); }
-const NIL = Cons(T, F);
 function NCONSP(n) { return Car(n); }
+const NIL = Cons(T, T);
 
 // initial value of queue: [1,1,1,1,1] as 5
 const q = CONS(ONE, CONS(ONE, CONS(ONE, CONS(ONE, CONS(ONE, NIL)))));
